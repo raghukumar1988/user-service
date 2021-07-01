@@ -27,7 +27,10 @@ public class UserService {
         log.info("Inside getUserandDeparmentById method of UserService class");
         ResponseTemplateVO responseTemplateVO= new ResponseTemplateVO();
         User user= userRepository.findUserByUserId(userId);
-        Department department= restTemplate.getForObject("http://localhost:9001/departments/"+userId,Department.class);
+        //Department department= restTemplate.getForObject("http://localhost:9001/departments/"+userId,Department.class);
+        /* Below is using Eureaka service discovery, The restTemplate needs to be annotated with @LoadBalanced
+        to inform spring to load balance if finds mutiple instance in same name. */
+        Department department= restTemplate.getForObject("http://DEPARTMENT-SERVICE/departments/"+userId,Department.class);
         responseTemplateVO.setUser(user);
         responseTemplateVO.setDepartment(department);
         return responseTemplateVO;
